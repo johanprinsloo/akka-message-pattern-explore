@@ -1,0 +1,41 @@
+digraph WorkRunner {
+
+
+
+     node [fontsize=12  fontname=SEOptimistLight labelfontname=SEOptimistLight shape=Mrecord penwidth=1.0 style=filled fillcolor=lightgrey];
+     edge [fontsize=10  fontname=SEOptimistLight labelfontname=SEOptimistLight penwidth=1.0 ];
+
+     Client;
+
+     node [fontsize=12  fontname=SEOptimist labelfontname=SEOptimist penwidth=2.0 color=gray style=filled fillcolor=white shape=ellipse];
+     edge [fontsize=10  fontname=SEOptimist labelfontname=SEOptimist penwidth=2.0 ];
+     graph [style="rounded, filled" color=darkgray fillcolor=khaki shape=Mrecord fontsize=12 fontname=SEOptimist labelfontname=SEOptimist labelloc="t" label="" splines=true overlap=false ];
+
+     Client -> Init [label="Start Work" fontsize=10  fontname=SEOptimistLight labelfontname=SEOptimistLight penwidth=1.0];
+     StateA -> Client [label="Done A" fontsize=10  fontname=SEOptimistLight labelfontname=SEOptimistLight penwidth=1.0];
+     StateB -> Client [label="Done B" fontsize=10  fontname=SEOptimistLight labelfontname=SEOptimistLight penwidth=1.0];
+
+     subgraph cluster0 {
+        node [style=filled,color=gray,fillcolor=white,shape=ellipse];
+        style=filled;
+        color=lightgrey;
+        Init -> StateA;
+        StateA -> StateA [label="  HeartBeat A \n (timeout A)" penwidth=1.0 ];
+        StateA -> StateB;
+        StateB -> StateB [label="  HeartBeat B \n (timeout B)" penwidth=1.0 ];
+        StateB -> StateDone;
+        label = "WorkRunner States";
+     };
+
+     ratio = auto;
+     bgcolor="transparent";
+
+
+     node [fontsize=12  fontname=SEOptimistLight labelfontname=SEOptimistLight shape=Mrecord penwidth=1.0 style=filled fillcolor=lightgrey];
+     edge [fontsize=10  fontname=SEOptimistLight labelfontname=SEOptimistLight penwidth=1.0 ];
+
+     StateA -> "WorkDriver:doA"  [dir="both"];
+     "WorkDriver:doA" -> "WorkDriver:doA" [label=" External API A"];
+     StateB -> "WorkDriver:doB" [dir="both"];
+     "WorkDriver:doB" -> "WorkDriver:doB" [label=" External API B"];
+ }
